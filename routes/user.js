@@ -1,12 +1,12 @@
 const { urlencoded } = require('body-parser');
 const express=require('express');
 var router=express.Router();
-const User=require('../modele/user')
+const user=require('../modele/user')
 
 router.get('/show',(req,res,next)=>{
     res.send('You are welcome');
     
-});/*
+});
 ////////////////////////////////// Post By parameters
 router.get('/add/:name/:email/:cin',(req,res,next)=>{
     console.log("notre data :"+JSON.stringify(req.params));
@@ -23,19 +23,44 @@ router.get('/add/:name/:email/:cin',(req,res,next)=>{
 
     });
 });
-*/
-router.post("/add", async function(req,res,next){
+
+router.put("/update/:id",async function(req,res){
+    try{
+        await user.findByIdAndUpdate(req.params.id,req.body,{new:true});
+        res.send("updated successfully");
+
+    }catch(err){
+        res.send(err)
+    }
+})
+
+
+router.delete("/delete/:id",async function(req,res){
+    try{
+        await user.findByIdAndRemove(req.params.id);
+        res.send("deleted successfully");
+
+    }catch(err){
+        res.send(err)
+    }
+})
+
+
+
+
+
+/*router.post("/add", async function(req,res,next){
     console.log("resultat:"+req.body);
     try{
 
-        const user = new User({...req.body});
-        await user.save();
-        res.status(201).send("heyy");
+        const User=new user(...req.body);
+        await User.save();
     } catch(err){
         console.log(err);
     }
+   
 
-});
+});*/
 
 ///////////////////////////////////////// Post By Json BodyRequest
 
